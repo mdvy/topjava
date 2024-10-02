@@ -24,8 +24,10 @@ public class UserMealsUtil {
                 new UserMeal(LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410)
         );
 
-        List<UserMealWithExcess> mealsTo = filteredByCycles(meals, LocalTime.of(7, 0), LocalTime.of(15, 0), 2000);
+        List<UserMealWithExcess> mealsTo = filteredByCycles(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
         mealsTo.forEach(System.out::println);
+
+        System.out.println("---");
 
         List<UserMealWithExcess> userMealWithExcesses = filteredByStreams(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
         userMealWithExcesses.forEach(System.out::println);
@@ -33,55 +35,40 @@ public class UserMealsUtil {
 
     public static List<UserMealWithExcess> filteredByCycles(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
 
-        meals.sort(Comparator.comparing(UserMeal::getDateTime));
-
-        List<UserMealWithExcess> mealWithExcess = new ArrayList<>();
-        Set<LocalDate> datesWithExceed = getLocalDates(meals, caloriesPerDay);
+        Map<LocalDate, Integer> mealsExceed = new HashMap<>();
 
         for (UserMeal meal : meals) {
-            boolean isExceed = datesWithExceed.contains(meal.getDateTime().toLocalDate());
-            boolean isBetweenHalfOpen = isBetweenHalfOpen(meal.getDateTime().toLocalTime(), startTime, endTime);
-
-            if (isBetweenHalfOpen)
-                mealWithExcess.add(new UserMealWithExcess(meal.getDateTime(), meal.getDescription(), meal.getCalories(), isExceed));
+            LocalDate date = meal.getDateTime().toLocalDate();
+            mealsExceed.merge(date, meal.getCalories(), Integer::sum);
         }
-        return mealWithExcess;
-    }
 
-    private static Set<LocalDate> getLocalDates(List<UserMeal> meals, int caloriesPerDay) {
-        Set<LocalDate> datesWithExceed = new HashSet<>();
+        List<UserMealWithExcess> mealsWithExcess = new ArrayList<>();
 
-        LocalDate tempLocalDate = meals.get(0).getDateTime().toLocalDate();
-
-        int sumCalories = 0;
         for (UserMeal meal : meals) {
-
-            if (!tempLocalDate.isEqual(meal.getDateTime().toLocalDate()))
-                sumCalories = 0;
-            tempLocalDate = meal.getDateTime().toLocalDate();
-
-            sumCalories += meal.getCalories();
-            if (sumCalories > caloriesPerDay) {
-                datesWithExceed.add(tempLocalDate);
+            boolean isBetweenHalfOpen = isBetweenHalfOpen(meal.getDateTime().toLocalTime(), startTime, endTime);
+            if (isBetweenHalfOpen) {
+                boolean isExceed = mealsExceed.get(meal.getDateTime().toLocalDate()) > caloriesPerDay;
+                mealsWithExcess.add(new UserMealWithExcess(meal.getDateTime(), meal.getDescription(), meal.getCalories(), isExceed));
             }
         }
-        return datesWithExceed;
+
+        return mealsWithExcess;
     }
 
     public static List<UserMealWithExcess> filteredByStreams(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
 
-        Map<LocalDate, Integer> groupingByDate = meals.stream().collect(
-                Collectors.groupingBy(UserMealsUtil::toLocalDate, Collectors.summingInt(UserMeal::getCalories)));
+        Map<LocalDate, Integer> groupingByDate = meals.stream()
+                .collect(Collectors.groupingBy(UserMealsUtil::toLocalDate, Collectors.summingInt(UserMeal::getCalories)));
 
-        return meals.stream().map(userMeal -> {
+        return meals.stream()
+                .filter(meal -> isBetweenHalfOpen(meal.getDateTime().toLocalTime(), startTime, endTime))
+                .map(userMeal -> {
                     boolean isExceed = groupingByDate.get(userMeal.getDateTime().toLocalDate()) > caloriesPerDay;
                     return new UserMealWithExcess(userMeal.getDateTime(), userMeal.getDescription(), userMeal.getCalories(), isExceed);
-                })
-                .filter(x -> isBetweenHalfOpen(x.getDateTime().toLocalTime(), startTime, endTime))
-                .collect(Collectors.toList());
+                }).collect(Collectors.toList());
     }
 
-    private static LocalDate toLocalDate(UserMeal x) {
-        return x.getDateTime().toLocalDate();
+    private static LocalDate toLocalDate(UserMeal meal) {
+        return meal.getDateTime().toLocalDate();
     }
 }
