@@ -58,7 +58,7 @@ public class MealServlet extends HttpServlet {
             mealRepository.create(new Meal(dateTime, description, calories));
         } else {
             int idValue = Integer.parseInt(id);
-            mealRepository.update(idValue, new Meal(idValue, dateTime, description, calories));
+            mealRepository.update(new Meal(idValue, dateTime, description, calories));
         }
         response.sendRedirect(request.getContextPath() + "/meals");
     }

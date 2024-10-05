@@ -9,5 +9,5 @@ public interface MealRepository {
     Meal create(Meal meal);
     void deleteById(int id);
     Meal findById(int id);
-    Meal update(int id, Meal meal);
+    Meal update(Meal meal);
 }

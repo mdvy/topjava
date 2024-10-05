@@ -47,8 +47,8 @@ public class MealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public Meal update(int id, Meal meal) {
-        return mealsMap.replace(id, meal);
+    public Meal update(Meal meal) {
+        return mealsMap.replace(meal.getId(), meal);
     }
 
     private Integer getId() {
