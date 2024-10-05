@@ -1,13 +1,9 @@
 package ru.javawebinar.topjava.repository;
 
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.MealTo;
-import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.Month;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,9 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MealRepositoryImpl implements MealRepository {
-    public static final int CALORIES_PER_DAY = 2000;
-    public final AtomicInteger id = new AtomicInteger();
-    public static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+    private final AtomicInteger id = new AtomicInteger();
     private final Map<Integer, Meal> mealsMap = new ConcurrentHashMap<>();
 
     public MealRepositoryImpl() {
@@ -31,17 +25,16 @@ public class MealRepositoryImpl implements MealRepository {
                 new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500),
                 new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410)
         );
-        meals.forEach(this::save);
+        meals.forEach(this::create);
     }
 
-    public synchronized List<MealTo> findAll() {
-        return MealsUtil.filteredByStreams(
-                new ArrayList<>(mealsMap.values()), LocalTime.MIN, LocalTime.MAX, CALORIES_PER_DAY);
+    public List<Meal> findAll() {
+        return new ArrayList<>(mealsMap.values());
     }
 
-    public synchronized void save(Meal meal) {
+    public Meal create(Meal meal) {
         meal.setId(id.incrementAndGet());
-        mealsMap.put(meal.getId(), meal);
+        return mealsMap.put(meal.getId(), meal);
     }
 
     public void deleteById(int id) {
@@ -54,11 +47,11 @@ public class MealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public void update(Integer id, Meal meal) {
-        mealsMap.replace(id, meal);
+    public Meal update(int id, Meal meal) {
+        return mealsMap.replace(id, meal);
     }
 
-    public Integer getId() {
+    private Integer getId() {
         return id.incrementAndGet();
     }
 }

@@ -10,7 +10,7 @@
 </head>
 <body>
 <div style="margin: 100px">
-    <form action="/topjava/meals" method="post">
+    <form action="" method="post">
         <input type="hidden" name="id" value="${meal.id}">
         <div class="form-group row">
             <label for="date_time" class="col-sm-2 col-form-label">Date/time</label>

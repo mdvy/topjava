@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html lang="ru">
 <head>
     <title>Meals</title>
@@ -22,23 +23,18 @@
             <th></th>
         </tr>
         <c:forEach items="${meals}" var="meal">
-            <c:if test="${meal.excess == true}">
-                <tr style="color: red">
-            </c:if>
-            <c:if test="${meal.excess == false}">
-                <tr>
-            </c:if>
-            <td>${meal.formattedDateTime}</td>
-            <td>${meal.description}</td>
-            <td>${meal.calories}</td>
-            <td>
-                <button type="button" class="btn btn-primary" onclick="location.href = 'meals/edit?id=${meal.id}'">
-                    Update
-                </button>
-            </td>
-            <td>
-                <button type="button" class="btn btn-warning" onclick="delete_meal(${meal.id})">Delete</button>
-            </td>
+            <tr style="color: ${meal.excess ? 'red' : 'green'}">
+                <td>${fn:replace(meal.dateTime, "T", " ")}</td>
+                <td>${meal.description}</td>
+                <td>${meal.calories}</td>
+                <td>
+                    <button type="button" class="btn btn-primary" onclick="location.href = 'meals/edit?id=${meal.id}'">
+                        Update
+                    </button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-warning" onclick="delete_meal(${meal.id})">Delete</button>
+                </td>
             </tr>
         </c:forEach>
     </table>

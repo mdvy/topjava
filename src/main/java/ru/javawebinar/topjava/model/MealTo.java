@@ -1,12 +1,10 @@
 package ru.javawebinar.topjava.model;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
-import static ru.javawebinar.topjava.repository.MealRepositoryImpl.dateTimeFormatter;
 
 public class MealTo {
-    private Integer id;
+    private int id;
 
     private final LocalDateTime dateTime;
 
@@ -43,10 +41,6 @@ public class MealTo {
 
     public LocalDateTime getDateTime() {
         return dateTime;
-    }
-
-    public String getFormattedDateTime(){
-        return dateTime.format(dateTimeFormatter);
     }
 
     public String getDescription() {

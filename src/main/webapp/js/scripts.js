@@ -1,9 +1,11 @@
 function delete_meal(id) {
+    let path = window.location.href;
+    let relPath =  path.substring(window.location.origin.length);
     $.ajax({
-        url: "/topjava/meals?id=" + id,
+        url: relPath + "?id=" + id,
         type: "DELETE",
         success: function () {
-            window.location = "/topjava/meals";
+            window.location = relPath;
         }
     });
 }

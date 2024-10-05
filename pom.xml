@@ -18,9 +18,7 @@
         <!-- Logging -->
         <logback.version>1.2.13</logback.version>
         <slf4j.version>1.7.36</slf4j.version>
-        <jackson-databind.version>2.18.0</jackson-databind.version>
         <jstl.version>1.2</jstl.version>
-        <jackson-datatype-jsr310.version>2.18.0</jackson-datatype-jsr310.version>
     </properties>
 
     <build>

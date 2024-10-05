@@ -2,8 +2,10 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.MealTo;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.repository.MealRepositoryImpl;
+import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -11,32 +13,35 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealServlet extends HttpServlet {
-    private final static Logger log = getLogger(MealServlet.class);
-    private final static MealRepository mealRepository = new MealRepositoryImpl();
+    private static final Logger log = getLogger(MealServlet.class);
+    private final MealRepository mealRepository = new MealRepositoryImpl();
+    public static final int CALORIES_PER_DAY = 2000;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        log.debug("get request to {}", request.getRequestURI());
+        log.debug("get request to {}", request.getContextPath());
 
         String forwardTo;
-        switch (request.getRequestURI()) {
-            case "/topjava/meals/new":
+        switch (request.getRequestURI().substring(request.getContextPath().length())) {
+            case "/meals/new":
                 request.setAttribute("meals", mealRepository.findAll());
                 forwardTo = "/edit-meal.jsp";
                 break;
-            case "/topjava/meals/edit":
+            case "/meals/edit":
                 String id = request.getParameter("id");
                 request.setAttribute("meal", mealRepository.findById(Integer.parseInt(id)));
                 forwardTo = "/edit-meal.jsp";
                 break;
             default:
-                request.setAttribute("meals", mealRepository.findAll());
+                List<MealTo> mealTos = MealsUtil.filteredByStreams(mealRepository.findAll(), LocalTime.MIN, LocalTime.MAX, CALORIES_PER_DAY);
+                request.setAttribute("meals", mealTos);
                 forwardTo = "/meals.jsp";
-                break;
         }
         request.getRequestDispatcher(forwardTo).forward(request, response);
     }
@@ -50,12 +55,12 @@ public class MealServlet extends HttpServlet {
         int calories = Integer.parseInt(request.getParameter("calories"));
         String id = request.getParameter("id");
         if (id.isEmpty()) {
-            mealRepository.save(new Meal(dateTime, description, calories));
+            mealRepository.create(new Meal(dateTime, description, calories));
         } else {
             int idValue = Integer.parseInt(id);
             mealRepository.update(idValue, new Meal(idValue, dateTime, description, calories));
         }
-        response.sendRedirect("meals");
+        response.sendRedirect(request.getContextPath() + "/meals");
     }
 
     @Override

@@ -51,14 +51,6 @@ public class Meal {
         return id;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Meal meal = (Meal) o;
-        return Objects.equals(id, meal.id);
-    }
-
     public void setId(Integer id) {
         this.id = id;
     }
