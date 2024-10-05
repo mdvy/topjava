@@ -30,7 +30,7 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        log.debug("get request to {}", request.getContextPath());
+        log.debug("get request to {}", request.getRequestURI());
 
         String forwardTo;
         switch (request.getRequestURI().substring(request.getContextPath().length())) {
@@ -48,6 +48,7 @@ public class MealServlet extends HttpServlet {
                 request.setAttribute("meals", mealTos);
                 forwardTo = "/meals.jsp";
         }
+        log.debug("forward to {}", forwardTo);
         request.getRequestDispatcher(forwardTo).forward(request, response);
     }
 
@@ -60,17 +61,22 @@ public class MealServlet extends HttpServlet {
         int calories = Integer.parseInt(request.getParameter("calories"));
         String id = request.getParameter("id");
         if (id.isEmpty()) {
+            log.info("create new meal");
             repository.create(new Meal(dateTime, description, calories));
         } else {
             int idValue = Integer.parseInt(id);
+            log.info("update meal with id = {}", id);
             repository.update(new Meal(idValue, dateTime, description, calories));
         }
-        response.sendRedirect(request.getContextPath() + "/meals");
+        String redirectTo = request.getContextPath() + "/meals";
+        log.debug("redirect to {}", redirectTo);
+        response.sendRedirect(redirectTo);
     }
 
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
         log.debug("delete request to {}", request.getRequestURI());
+        log.info("delete meal with id = {}", request.getParameter("id"));
 
         repository.deleteById(Integer.parseInt(request.getParameter("id")));
     }
