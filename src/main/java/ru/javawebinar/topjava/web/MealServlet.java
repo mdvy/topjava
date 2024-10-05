@@ -31,12 +31,12 @@ public class MealServlet extends HttpServlet {
         switch (request.getRequestURI().substring(request.getContextPath().length())) {
             case "/meals/new":
                 request.setAttribute("meals", repository.findAll());
-                forwardTo = "/edit-meal.jsp";
+                forwardTo = "/editMeal.jsp";
                 break;
             case "/meals/edit":
                 String id = request.getParameter("id");
                 request.setAttribute("meal", repository.findById(Integer.parseInt(id)));
-                forwardTo = "/edit-meal.jsp";
+                forwardTo = "/editMeal.jsp";
                 break;
             default:
                 List<MealTo> mealTos = MealsUtil.filteredByStreams(repository.findAll(), LocalTime.MIN, LocalTime.MAX, CALORIES_PER_DAY);
