@@ -4,7 +4,7 @@ import ru.javawebinar.topjava.model.Meal;
 
 import java.util.List;
 
-public interface MealRepository {
+public interface Repository {
     List<Meal> findAll();
     Meal create(Meal meal);
     void deleteById(int id);
