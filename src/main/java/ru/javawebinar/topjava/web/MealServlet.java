@@ -20,8 +20,13 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = getLogger(MealServlet.class);
-    private final Repository repository = new RepositoryInMemory();
     public static final int CALORIES_PER_DAY = 2000;
+    private Repository repository;
+
+    @Override
+    public void init() {
+        repository = new RepositoryInMemory();
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -47,7 +52,7 @@ public class MealServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         log.debug("post request to {}", request.getRequestURI());
 
         LocalDateTime dateTime = LocalDateTime.parse(request.getParameter("date_time"));
@@ -64,7 +69,7 @@ public class MealServlet extends HttpServlet {
     }
 
     @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
         log.debug("delete request to {}", request.getRequestURI());
 
         repository.deleteById(Integer.parseInt(request.getParameter("id")));
