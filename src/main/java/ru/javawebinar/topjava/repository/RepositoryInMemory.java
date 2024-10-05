@@ -52,8 +52,4 @@ public class RepositoryInMemory implements Repository {
         mealsMap.replace(meal.getId(), meal);
         return mealsMap.get(meal.getId());
     }
-
-    private Integer getId() {
-        return id.incrementAndGet();
-    }
 }
