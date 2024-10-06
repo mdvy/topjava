@@ -35,16 +35,17 @@ public class MealServlet extends HttpServlet {
         String forwardTo;
         switch (request.getRequestURI().substring(request.getContextPath().length())) {
             case "/meals/new":
-                request.setAttribute("meals", repository.findAll());
                 forwardTo = "/editMeal.jsp";
                 break;
             case "/meals/edit":
                 String id = request.getParameter("id");
+                log.debug("set attribute meal to request");
                 request.setAttribute("meal", repository.findById(Integer.parseInt(id)));
                 forwardTo = "/editMeal.jsp";
                 break;
             default:
                 List<MealTo> mealTos = MealsUtil.filteredByStreams(repository.findAll(), LocalTime.MIN, LocalTime.MAX, CALORIES_PER_DAY);
+                log.debug("set attribute meals to request");
                 request.setAttribute("meals", mealTos);
                 forwardTo = "/meals.jsp";
         }
