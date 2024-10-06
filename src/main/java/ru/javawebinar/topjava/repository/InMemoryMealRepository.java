@@ -35,7 +35,7 @@ public class InMemoryMealRepository implements MealRepository {
     public Meal create(Meal meal) {
         meal.setId(id.incrementAndGet());
         mealsMap.put(meal.getId(), meal);
-        return mealsMap.get(meal.getId());
+        return meal;
     }
 
     public void deleteById(int id) {
@@ -50,6 +50,6 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public Meal update(Meal meal) {
         mealsMap.replace(meal.getId(), meal);
-        return mealsMap.get(meal.getId());
+        return meal;
     }
 }
