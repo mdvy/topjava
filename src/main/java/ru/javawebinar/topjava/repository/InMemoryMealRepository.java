@@ -49,7 +49,6 @@ public class InMemoryMealRepository implements MealRepository {
 
     @Override
     public Meal update(Meal meal) {
-        mealsMap.replace(meal.getId(), meal);
-        return meal;
+        return mealsMap.replace(meal.getId(), meal) == null ? null : meal;
     }
 }
