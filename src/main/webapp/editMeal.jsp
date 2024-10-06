@@ -9,6 +9,8 @@
 </head>
 <body>
 <div style="margin: 100px">
+    <h1>${meal == null ? "Add meal" : "Edit meal"}</h1>
+    <hr>
     <form action="" method="post">
         <input type="hidden" name="id" value="${meal.id}">
         <div class="form-group row">
