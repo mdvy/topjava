@@ -24,6 +24,7 @@ public class Meal {
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
+        this.userId = userId;
     }
 
     public Integer getId() {
@@ -73,6 +74,7 @@ public class Meal {
                 ", dateTime=" + dateTime +
                 ", description='" + description + '\'' +
                 ", calories=" + calories +
+                ", userId=" + userId +
                 '}';
     }
 }
