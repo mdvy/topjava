@@ -5,25 +5,25 @@
 </head>
 <body>
 <h3>Проект <a href="https://github.com/JavaWebinar/topjava" target="_blank">Java Enterprise (Topjava)</a></h3>
-    <div style="font-size: large">
+<div style="font-size: large">
     <hr>
     <label for="user_select">
         Выберите пользователя:
     </label>
-        <select id="user_select" name="selector" onchange="selectUser()">
-            <option value="1" selected>User1</option>
-            <option value="2">User2</option>
-        </select>
+    <select id="user_select" name="selector" onchange="selectUser()">
+        <option value="1" selected>User1</option>
+        <option value="2">User2</option>
+    </select>
 
     <hr>
     <ul>
         <li><a href="users">Users</a></li>
         <li><a id="usersUrl" href="users?id=1">Meals</a></li>
     </ul>
-    </div>
+</div>
 </body>
 <script>
-    function selectUser(){
+    function selectUser() {
         let id = document.getElementById("user_select").value;
         document.getElementById("usersUrl").setAttribute("href", "users?id=" + id);
     }

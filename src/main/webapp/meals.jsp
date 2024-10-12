@@ -5,7 +5,9 @@
 <%--<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>--%>
 <html>
 <head>
+
     <title>Meal list</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <style>
         .normal {
             color: green;
@@ -15,40 +17,46 @@
             color: red;
         }
     </style>
+    <script>
+        function filter() {
+            let path = window.location.href;
+            let relPath = path.substring(window.location.origin.length);
+            $.ajax({
+                url: relPath,
+                type: "get",
+                data: {
+                    action: 'filter',
+                    startDate: $('#start_date').val(),
+                    endDate: $('#end_date').val(),
+                    startTime: $('#start_time').val(),
+                    endTime: $('#end_time').val(),
+                },
+                success: function (response) {
+                    $("#jsp_container").html(response);
+                }
+            });
+        }
+    </script>
 </head>
 <body>
 <section>
     <h3><a href="index.html">Home</a></h3>
     <hr/>
     <h2>Meals</h2>
+    start date<input id="start_date" type="date" name="startDate" required>
+    end date<input id="end_date" type="date" name="endDate" required>
+    <br>
+    <br>
+    start time<input id="start_time" type="time" name="startTime" required>
+    end time<input id="end_time" type="time" name="endTime" required>
+    <input type="button" value="Apply filter" id="submit_date_time" onclick="filter()"/>
+    <br>
+
     <a href="meals?action=create">Add Meal</a>
     <br><br>
-    <table border="1" cellpadding="8" cellspacing="0">
-        <thead>
-        <tr>
-            <th>Date</th>
-            <th>Description</th>
-            <th>Calories</th>
-            <th></th>
-            <th></th>
-        </tr>
-        </thead>
-        <c:forEach items="${requestScope.meals}" var="meal">
-            <jsp:useBean id="meal" type="ru.javawebinar.topjava.to.MealTo"/>
-            <tr class="${meal.excess ? 'excess' : 'normal'}">
-                <td>
-                        <%--${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}--%>
-                        <%--<%=TimeUtil.toString(meal.getDateTime())%>--%>
-                        <%--${fn:replace(meal.dateTime, 'T', ' ')}--%>
-                        ${fn:formatDateTime(meal.dateTime)}
-                </td>
-                <td>${meal.description}</td>
-                <td>${meal.calories}</td>
-                <td><a href="meals?action=update&id=${meal.id}">Update</a></td>
-                <td><a href="meals?action=delete&id=${meal.id}">Delete</a></td>
-            </tr>
-        </c:forEach>
-    </table>
+    <div id="jsp_container">
+        <jsp:include page="mealsTable.jsp"/>
+    </div>
 </section>
 </body>
 </html>

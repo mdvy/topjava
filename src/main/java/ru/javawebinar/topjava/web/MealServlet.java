@@ -11,18 +11,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
-    //private MealRepository repository;
     private MealRestController controller;
 
     @Override
     public void init() {
-        //repository = new InMemoryMealRepository();
         controller = new ClassPathXmlApplicationContext("spring/spring-app.xml")
                 .getBean(MealRestController.class);
     }
@@ -64,6 +65,20 @@ public class MealServlet extends HttpServlet {
                         controller.get(getId(request));
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
+                break;
+            case "filter":
+                String startDateStr = request.getParameter("startDate");
+                String endDateStr = request.getParameter("endDate");
+                String startTimeStr = request.getParameter("startTime");
+                String endTimeStr = request.getParameter("endTime");
+
+                LocalDate startDate = startDateStr.isEmpty() ? LocalDate.MIN : LocalDate.parse(startDateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                LocalDate endDate = endDateStr.isEmpty() ? LocalDate.MAX : LocalDate.parse(request.getParameter("endDate"), DateTimeFormatter.ofPattern("yyyy-MM-dd")).plusDays(1);
+                LocalTime startTime = startTimeStr.isEmpty() ? LocalTime.MIN : LocalTime.parse(request.getParameter("startTime"), DateTimeFormatter.ofPattern("HH:mm"));
+                LocalTime endTime = endTimeStr.isEmpty() ? LocalTime.MAX : LocalTime.parse(request.getParameter("endTime"), DateTimeFormatter.ofPattern("HH:mm")).plusMinutes(1);
+
+                request.setAttribute("meals", controller.getFiltered(startDate, startTime, endDate, endTime));
+                request.getRequestDispatcher("/mealsTable.jsp").forward(request, response);
                 break;
             case "all":
             default:
