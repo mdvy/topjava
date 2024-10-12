@@ -49,7 +49,7 @@ public class MealRestController {
 
     public List<MealTo> getFiltered(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
         return getAll().stream()
-                .filter(meal -> DateTimeUtil.isDateBetweenHalfOpen(meal.getDateTime().toLocalDate(), startDate, endDate))
+                .filter(meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalDate(), startDate, endDate))
                 .filter(meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalTime(), startTime, endTime))
                 .collect(Collectors.toList());
     }

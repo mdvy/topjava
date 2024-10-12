@@ -37,7 +37,7 @@ public class InMemoryMealRepository implements MealRepository {
     }
 
     @Override
-    public boolean delete(int id, Integer userId) {
+    public boolean delete(int id, int userId) {
         return repository.computeIfPresent(id, (oldId, oldMeal) -> {
             if (oldMeal.getUserId().equals(userId)) {
                 return null;
@@ -47,7 +47,7 @@ public class InMemoryMealRepository implements MealRepository {
     }
 
     @Override
-    public Meal get(int id, Integer userId) {
+    public Meal get(int id, int userId) {
         return repository.values().stream()
                 .filter(meal -> meal.getUserId().equals(userId) && meal.getId() == id)
                 .findFirst()
@@ -55,7 +55,7 @@ public class InMemoryMealRepository implements MealRepository {
     }
 
     @Override
-    public Collection<Meal> getAll(Integer userId) {
+    public Collection<Meal> getAll(int userId) {
         return repository.values()
                 .stream()
                 .filter(meal -> meal.getUserId().equals(userId))

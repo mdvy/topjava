@@ -2,7 +2,6 @@ package ru.javawebinar.topjava.service;
 
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 
 import java.util.ArrayList;
@@ -18,6 +17,7 @@ public class MealService {
     public MealService(MealRepository repository) {
         this.repository = repository;
     }
+
     public Meal create(Meal meal, int userId) {
         return repository.save(meal, userId);
     }

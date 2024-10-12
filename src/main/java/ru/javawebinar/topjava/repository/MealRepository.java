@@ -10,11 +10,11 @@ public interface MealRepository {
     Meal save(Meal meal, int userId);
 
     // false if meal does not belong to userId
-    boolean delete(int id, Integer userId);
+    boolean delete(int id, int userId);
 
     // null if meal does not belong to userId
-    Meal get(int id, Integer userId);
+    Meal get(int id, int userId);
 
     // ORDERED dateTime desc
-    Collection<Meal> getAll(Integer userId);
+    Collection<Meal> getAll(int userId);
 }
