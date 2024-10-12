@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.web.meal.MealRestController;
@@ -21,11 +22,17 @@ import java.util.Objects;
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
     private MealRestController controller;
+    ClassPathXmlApplicationContext context;
 
     @Override
     public void init() {
-        controller = new ClassPathXmlApplicationContext("spring/spring-app.xml")
-                .getBean(MealRestController.class);
+        ApplicationContext context = new ClassPathXmlApplicationContext("spring/spring-app.xml");
+        controller = context.getBean(MealRestController.class);
+    }
+
+    @Override
+    public void destroy() {
+        context.close();
     }
 
     @Override
