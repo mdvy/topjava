@@ -15,9 +15,9 @@ public class MealRestController {
         this.service = service;
     }
 
-    public Meal create(Meal meal) {
-        return service.create(meal);
-    }
+//    public Meal create(Meal meal) {
+//        return service.create(meal);
+//    }
 
     public void delete(int id, Integer userId) {
         service.delete(id, userId);

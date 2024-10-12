@@ -27,26 +27,23 @@ public class InMemoryMealRepository implements MealRepository {
             meal.setId(counter.incrementAndGet());
             repository.put(meal.getId(), meal);
             return meal;
-        } else if (repository.get(meal.getId()).getUserId().equals(meal.getUserId())) {
-            return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
-        } else
-            return null;
+        }
+        return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> {
+            if (oldMeal.getUserId().equals(meal.getUserId())) {
+                return meal;
+            } else return null;
+        });
     }
 
     @Override
     public boolean delete(int id, Integer userId) {
-        if (repository.get(id).getUserId().equals(userId)) {
-            return repository.remove(id) != null;
-        } else
-            return false;
+        return repository.remove(id, new Meal(id, userId, null, null, 0));
     }
 
     @Override
     public Meal get(int id, Integer userId) {
-        if (repository.get(id).getUserId().equals(userId)) {
-            return repository.get(id);
-        } else
-            return null;
+        Meal storedMeal = repository.get(id);
+        return (storedMeal != null && storedMeal.getUserId().equals(userId)) ? storedMeal : null;
     }
 
     @Override
