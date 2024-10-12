@@ -78,7 +78,6 @@ public class MealServlet extends HttpServlet {
                 String endDateStr = request.getParameter("endDate");
                 String startTimeStr = request.getParameter("startTime");
                 String endTimeStr = request.getParameter("endTime");
-
                 LocalDate startDate = startDateStr.isEmpty() ? LocalDate.MIN : LocalDate.parse(startDateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 LocalDate endDate = endDateStr.isEmpty() ? LocalDate.MAX : LocalDate.parse(request.getParameter("endDate"), DateTimeFormatter.ofPattern("yyyy-MM-dd")).plusDays(1);
                 LocalTime startTime = startTimeStr.isEmpty() ? LocalTime.MIN : LocalTime.parse(request.getParameter("startTime"), DateTimeFormatter.ofPattern("HH:mm"));
