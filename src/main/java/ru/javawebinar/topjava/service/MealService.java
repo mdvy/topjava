@@ -18,9 +18,9 @@ public class MealService {
     public MealService(MealRepository repository) {
         this.repository = repository;
     }
-//    public Meal create(Meal meal) {
-//        return repository.save(meal);
-//    }
+    public Meal create(Meal meal, int userId) {
+        return repository.save(meal, userId);
+    }
 
     public void delete(int id, Integer userId) {
         checkNotFoundWithId(repository.delete(id, userId), id);
@@ -35,6 +35,6 @@ public class MealService {
     }
 
     public void update(Meal meal, int userId) {
-        checkNotFoundWithId(repository.save(meal), userId);
+        checkNotFoundWithId(repository.save(meal, userId), meal.getId());
     }
 }
