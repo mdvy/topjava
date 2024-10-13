@@ -11,14 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
-
-import static ru.javawebinar.topjava.util.DateTimeUtil.parseDate;
-import static ru.javawebinar.topjava.util.DateTimeUtil.parseTime;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
@@ -79,11 +74,7 @@ public class MealServlet extends HttpServlet {
                 String endDateStr = request.getParameter("endDate");
                 String startTimeStr = request.getParameter("startTime");
                 String endTimeStr = request.getParameter("endTime");
-                LocalDate startDate = startDateStr.isEmpty() ? LocalDate.MIN : parseDate(startDateStr);
-                LocalDate endDate = endDateStr.isEmpty() ? LocalDate.MAX : parseDate(endDateStr).plusDays(1);
-                LocalTime startTime = startTimeStr.isEmpty() ? LocalTime.MIN : parseTime(startTimeStr);
-                LocalTime endTime = endTimeStr.isEmpty() ? LocalTime.MAX : parseTime(endTimeStr).plusMinutes(1);
-                request.setAttribute("meals", controller.getFiltered(startDate, startTime, endDate, endTime));
+                request.setAttribute("meals", controller.getFiltered(startDateStr, startTimeStr, endDateStr, endTimeStr));
                 request.getRequestDispatcher("/mealsTable.jsp").forward(request, response);
                 break;
             case "all":
