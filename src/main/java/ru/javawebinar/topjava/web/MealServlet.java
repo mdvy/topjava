@@ -2,7 +2,6 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.web.meal.MealRestController;
@@ -15,18 +14,20 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
+
+import static ru.javawebinar.topjava.util.DateTimeUtil.parseDate;
+import static ru.javawebinar.topjava.util.DateTimeUtil.parseTime;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
     private MealRestController controller;
-    ClassPathXmlApplicationContext context;
+    private ClassPathXmlApplicationContext context;
 
     @Override
     public void init() {
-        ApplicationContext context = new ClassPathXmlApplicationContext("spring/spring-app.xml");
+        context = new ClassPathXmlApplicationContext("spring/spring-app.xml");
         controller = context.getBean(MealRestController.class);
     }
 
@@ -78,11 +79,10 @@ public class MealServlet extends HttpServlet {
                 String endDateStr = request.getParameter("endDate");
                 String startTimeStr = request.getParameter("startTime");
                 String endTimeStr = request.getParameter("endTime");
-                LocalDate startDate = startDateStr.isEmpty() ? LocalDate.MIN : LocalDate.parse(startDateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                LocalDate endDate = endDateStr.isEmpty() ? LocalDate.MAX : LocalDate.parse(request.getParameter("endDate"), DateTimeFormatter.ofPattern("yyyy-MM-dd")).plusDays(1);
-                LocalTime startTime = startTimeStr.isEmpty() ? LocalTime.MIN : LocalTime.parse(request.getParameter("startTime"), DateTimeFormatter.ofPattern("HH:mm"));
-                LocalTime endTime = endTimeStr.isEmpty() ? LocalTime.MAX : LocalTime.parse(request.getParameter("endTime"), DateTimeFormatter.ofPattern("HH:mm")).plusMinutes(1);
-
+                LocalDate startDate = startDateStr.isEmpty() ? LocalDate.MIN : parseDate(startDateStr);
+                LocalDate endDate = endDateStr.isEmpty() ? LocalDate.MAX : parseDate(endDateStr).plusDays(1);
+                LocalTime startTime = startTimeStr.isEmpty() ? LocalTime.MIN : parseTime(startTimeStr);
+                LocalTime endTime = endTimeStr.isEmpty() ? LocalTime.MAX : parseTime(endTimeStr).plusMinutes(1);
                 request.setAttribute("meals", controller.getFiltered(startDate, startTime, endDate, endTime));
                 request.getRequestDispatcher("/mealsTable.jsp").forward(request, response);
                 break;
