@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.AbstractNamedEntity;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
-import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.util.Comparator;
 import java.util.List;
@@ -59,6 +58,6 @@ public class InMemoryUserRepository implements UserRepository {
         return repository.values().stream()
                 .filter(user -> email.equals(user.getEmail()))
                 .findFirst()
-                .orElseThrow(() -> new NotFoundException("User not found by email=" + email));
+                .orElse(null);
     }
 }

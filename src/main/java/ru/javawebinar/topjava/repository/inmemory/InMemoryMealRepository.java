@@ -38,7 +38,7 @@ public class InMemoryMealRepository implements MealRepository {
         }
         log.info("update meal {}", meal);
         return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> {
-            if (oldMeal.getUserId().equals(userId)) {
+            if (oldMeal.getUserId() == userId) {
                 meal.setUserId(userId);
                 return meal;
             } else return null;
@@ -49,7 +49,7 @@ public class InMemoryMealRepository implements MealRepository {
     public boolean delete(int id, int userId) {
         log.info("delete meal with id={} of user with id={}", id, userId);
         return repository.computeIfPresent(id, (oldId, oldMeal) -> {
-            if (oldMeal.getUserId().equals(userId)) {
+            if (oldMeal.getUserId() == userId) {
                 return null;
             }
             return oldMeal;
@@ -60,7 +60,7 @@ public class InMemoryMealRepository implements MealRepository {
     public Meal get(int id, int userId) {
         log.info("get meal with id={} of user with id={}", id, userId);
         return repository.values().stream()
-                .filter(meal -> meal.getUserId().equals(userId) && meal.getId() == id)
+                .filter(meal -> meal.getUserId() == userId && meal.getId() == id)
                 .findFirst()
                 .orElse(null);
     }
@@ -69,7 +69,7 @@ public class InMemoryMealRepository implements MealRepository {
     public Collection<Meal> getAll(int userId) {
         return repository.values()
                 .stream()
-                .filter(meal -> meal.getUserId().equals(userId))
+                .filter(meal -> meal.getUserId() == userId)
                 .sorted(Comparator.comparing(Meal::getDate).reversed())
                 .collect(Collectors.toList());
     }
