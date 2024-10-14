@@ -25,7 +25,8 @@ public class InMemoryMealRepository implements MealRepository {
     private final AtomicInteger counter = new AtomicInteger(0);
 
     {
-        MealsUtil.meals.forEach(meal -> this.save(meal, 1));
+        MealsUtil.mealsUser1.forEach(meal -> this.save(meal, 1));
+        MealsUtil.mealsUser2.forEach(meal -> this.save(meal, 2));
     }
 
     @Override
@@ -70,7 +71,7 @@ public class InMemoryMealRepository implements MealRepository {
         return repository.values()
                 .stream()
                 .filter(meal -> meal.getUserId() == userId)
-                .sorted(Comparator.comparing(Meal::getDate).reversed())
+                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList());
     }
 
