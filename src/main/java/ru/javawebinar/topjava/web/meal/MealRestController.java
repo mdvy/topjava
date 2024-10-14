@@ -60,7 +60,7 @@ public class MealRestController {
         LocalTime startTime = startTimeStr.isEmpty() ? LocalTime.MIN : parseTime(startTimeStr);
         LocalTime endTime = endTimeStr.isEmpty() ? LocalTime.MAX : parseTime(endTimeStr);
         log.info("apply filter {} - {} and {} - {}", startDate, endDate, startTime, endTime);
-        List<Meal> filteredByDate = service.getFilteredByDate(startDate, endDate, SecurityUtil.authUserId());
+        List<Meal> filteredByDate = service.getFilteredByDate(SecurityUtil.authUserId(), startDate, endDate);
         return MealsUtil.getFilteredTos(filteredByDate, SecurityUtil.authUserCaloriesPerDay(), startTime, endTime);
     }
 }

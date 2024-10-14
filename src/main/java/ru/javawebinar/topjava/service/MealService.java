@@ -19,7 +19,7 @@ public class MealService {
     }
 
     public Meal create(Meal meal, int userId) {
-        return repository.create(meal, userId);
+        return repository.save(meal, userId);
     }
 
     public void delete(int id, int userId) {
@@ -35,10 +35,10 @@ public class MealService {
     }
 
     public void update(Meal meal, int userId) {
-        checkNotFoundWithId(repository.update(meal, userId), meal.getId());
+        checkNotFoundWithId(repository.save(meal, userId), meal.getId());
     }
 
-    public List<Meal> getFilteredByDate(LocalDate startDate, LocalDate endDate, int userId) {
-        return repository.filterByDate(startDate, endDate, userId);
+    public List<Meal> getFilteredByDate(int userId, LocalDate startDate, LocalDate endDate) {
+        return repository.filterByDate(userId, startDate, endDate);
     }
 }

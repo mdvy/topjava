@@ -9,9 +9,7 @@ import java.util.List;
 // TODO add userId
 public interface MealRepository {
     // null if updated meal does not belong to userId
-    Meal create(Meal meal, int userId);
-
-    Meal update(Meal meal, int userId);
+    Meal save(Meal meal, int userId);
 
     // false if meal does not belong to userId
     boolean delete(int id, int userId);
@@ -20,7 +18,6 @@ public interface MealRepository {
     Meal get(int id, int userId);
 
     // ORDERED dateTime desc
-    Collection<Meal> getAll(int userId);
-
-    List<Meal> filterByDate(LocalDate startDate, LocalDate endDate, int userId);
+    List<Meal> getAll(int userId);
+    List<Meal> filterByDate(int userId, LocalDate startDate, LocalDate endDate);
 }
