@@ -25,31 +25,37 @@ public class InMemoryMealRepository implements MealRepository {
     private final AtomicInteger counter = new AtomicInteger(0);
 
     {
-        MealsUtil.mealsUser1.forEach(meal -> this.save(meal, 1));
-        MealsUtil.mealsUser2.forEach(meal -> this.save(meal, 2));
+        MealsUtil.mealsUser1.forEach(meal -> this.create(meal, 1));
+        MealsUtil.mealsUser2.forEach(meal -> this.create(meal, 2));
     }
 
     @Override
-    public Meal save(Meal meal, int userId) {
+    public Meal create(Meal meal, int userId) {
+        log.info("save new {}", meal);
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
-            meal.setUserId(userId);
-            log.info("save new meal {}", meal);
-            return repository.putIfAbsent(meal.getId(), meal) == null ? meal : null;
         }
-        log.info("update meal {}", meal);
-        return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> {
-            if (oldMeal.getUserId() == userId) {
-                meal.setUserId(userId);
-                return meal;
-            } else return null;
-        });
+        meal.setUserId(userId);
+        return repository.putIfAbsent(meal.getId(), meal) == null ? meal : null;
     }
+
+    @Override
+    public Meal update(Meal meal, int userId) {
+        log.info("update {}", meal);
+        synchronized (repository) {
+            Meal storedMeal = repository.get(meal.getId());
+            if (storedMeal != null && storedMeal.getUserId() == userId) {
+                return repository.replace(storedMeal.getId(), meal) != null ? meal : null;
+            }
+            return null;
+        }
+    }
+
 
     @Override
     public boolean delete(int id, int userId) {
+        log.info("delete meal with id={} of user with id={}", id, userId);
         synchronized (repository) {
-            log.info("delete meal with id={} of user with id={}", id, userId);
             Meal meal = repository.get(id);
             if (meal != null && meal.getUserId() == userId) {
                 return repository.remove(id) != null;
@@ -77,7 +83,7 @@ public class InMemoryMealRepository implements MealRepository {
     }
 
     @Override
-    public List<Meal> filterByDate(LocalDate startDate, LocalDate endDate, int userId){
+    public List<Meal> filterByDate(LocalDate startDate, LocalDate endDate, int userId) {
         return getAll(userId)
                 .stream()
                 .filter(meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalDate(), startDate, endDate))
