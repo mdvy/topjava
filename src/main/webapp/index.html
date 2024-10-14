@@ -10,22 +10,34 @@
     <label for="user_select">
         Выберите пользователя:
     </label>
-    <select id="user_select" name="selector" onchange="selectUser()">
+    <select id="user_select" name="selector">
         <option value="1" selected>User1</option>
         <option value="2">User2</option>
     </select>
-
+    <button type="button" onclick="setUserId()" value="Apply">Apply</button>
     <hr>
     <ul>
         <li><a href="users">Users</a></li>
-        <li><a id="usersUrl" href="users?id=1">Meals</a></li>
+        <li><a id="usersUrl" href="meals">Meals</a></li>
     </ul>
 </div>
 </body>
 <script>
-    function selectUser() {
-        let id = document.getElementById("user_select").value;
-        document.getElementById("usersUrl").setAttribute("href", "users?id=" + id);
+    function setUserId() {
+        let userId = document.getElementById("user_select").value;
+        let path = window.location.href;
+        let relPath = path.substring(window.location.origin.length);
+        $.ajax({
+            url: relPath + "/users",
+            type: "post",
+            data: {
+                id : userId,
+            },
+            success: function (response) {
+                alert("current user id=" + userId);
+            }
+        });
     }
 </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </html>
