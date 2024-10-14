@@ -5,7 +5,6 @@
 <%--<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>--%>
 <html>
 <head>
-
     <title>Meal list</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <style>
@@ -43,15 +42,14 @@
     <h3><a href="index.html">Home</a></h3>
     <hr/>
     <h2>Meals</h2>
-    start date<input id="start_date" type="date" name="startDate" required>
-    end date<input id="end_date" type="date" name="endDate" required>
+    start date<input id="start_date" type="date" name="startDate">
+    end date<input id="end_date" type="date" name="endDate">
     <br>
     <br>
-    start time<input id="start_time" type="time" name="startTime" required>
-    end time<input id="end_time" type="time" name="endTime" required>
+    start time<input id="start_time" type="time" name="startTime">
+    end time<input id="end_time" type="time" name="endTime">
     <input type="button" value="Apply filter" id="submit_date_time" onclick="filter()"/>
     <br>
-
     <a href="meals?action=create">Add Meal</a>
     <br><br>
     <div id="jsp_container">
