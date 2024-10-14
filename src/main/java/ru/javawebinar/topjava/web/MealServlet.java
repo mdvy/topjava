@@ -41,7 +41,7 @@ public class MealServlet extends HttpServlet {
                 request.getParameter("description"),
                 Integer.parseInt(request.getParameter("calories"))
         );
-        log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
+        log.info(id.isEmpty() ? "Create {}" : "Update {}", meal);
         if (id.isEmpty()) {
             controller.create(meal);
         } else {
