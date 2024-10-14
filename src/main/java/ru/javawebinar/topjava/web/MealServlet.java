@@ -11,9 +11,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
+
+import static ru.javawebinar.topjava.util.DateTimeUtil.parseDate;
+import static ru.javawebinar.topjava.util.DateTimeUtil.parseTime;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
@@ -70,11 +75,16 @@ public class MealServlet extends HttpServlet {
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                 break;
             case "filter":
+                log.info("get filtered");
                 String startDateStr = request.getParameter("startDate");
                 String endDateStr = request.getParameter("endDate");
                 String startTimeStr = request.getParameter("startTime");
                 String endTimeStr = request.getParameter("endTime");
-                request.setAttribute("meals", controller.getFiltered(startDateStr, startTimeStr, endDateStr, endTimeStr));
+                LocalDate startDate = startDateStr.isEmpty() ? null : parseDate(startDateStr);
+                LocalDate endDate = endDateStr.isEmpty() ? null : parseDate(endDateStr);
+                LocalTime startTime = startTimeStr.isEmpty() ? null : parseTime(startTimeStr);
+                LocalTime endTime = endTimeStr.isEmpty() ? null : parseTime(endTimeStr);
+                request.setAttribute("meals", controller.getFiltered(startDate, startTime, endDate, endTime));
                 request.getRequestDispatcher("/mealsTable.jsp").forward(request, response);
                 break;
             case "all":

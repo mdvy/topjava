@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.web.meal;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
@@ -13,8 +14,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import static ru.javawebinar.topjava.util.DateTimeUtil.parseDate;
-import static ru.javawebinar.topjava.util.DateTimeUtil.parseTime;
 import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
 
@@ -54,13 +53,13 @@ public class MealRestController {
         service.update(meal, SecurityUtil.authUserId());
     }
 
-    public List<MealTo> getFiltered(String startDateStr, String startTimeStr, String endDateStr, String endTimeStr) {
-        LocalDate startDate = startDateStr.isEmpty() ? LocalDate.MIN : parseDate(startDateStr);
-        LocalDate endDate = endDateStr.isEmpty() ? LocalDate.MAX : parseDate(endDateStr).plusDays(1);
-        LocalTime startTime = startTimeStr.isEmpty() ? LocalTime.MIN : parseTime(startTimeStr);
-        LocalTime endTime = endTimeStr.isEmpty() ? LocalTime.MAX : parseTime(endTimeStr);
+    public List<MealTo> getFiltered(LocalDate  startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
         log.info("apply filter {} - {} and {} - {}", startDate, endDate, startTime, endTime);
-        List<Meal> filteredByDate = service.getFilteredByDate(SecurityUtil.authUserId(), startDate, endDate);
-        return MealsUtil.getFilteredTos(filteredByDate, SecurityUtil.authUserCaloriesPerDay(), startTime, endTime);
+        List<Meal> filteredByDate = service.getFilteredByDate(SecurityUtil.authUserId(),
+                startDate == null ? LocalDate.MIN : startDate,
+                endDate == null ? LocalDate.MAX : endDate.plusDays(1));
+        return MealsUtil.getFilteredTos(filteredByDate, SecurityUtil.authUserCaloriesPerDay(),
+                startTime == null ? LocalTime.MIN : startTime,
+                endTime == null ? LocalTime.MAX : endTime);
     }
 }
