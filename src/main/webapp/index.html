@@ -25,15 +25,17 @@
 <script>
     function setUserId() {
         let userId = document.getElementById("user_select").value;
-        let path = window.location.href;
-        let relPath = path.substring(window.location.origin.length);
+        let path = window.location.pathname;
+        const parts = path.split('/');
+        parts.pop();
+        path = parts.join('/');
         $.ajax({
-            url: relPath + "/users",
+            url: path + "/users",
             type: "post",
             data: {
                 id : userId,
             },
-            success: function (response) {
+            success: function () {
                 alert("current user id=" + userId);
             }
         });
