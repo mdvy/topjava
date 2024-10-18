@@ -10,3 +10,11 @@ VALUES ('User', 'user@yandex.ru', 'password'),
 INSERT INTO user_role (role, user_id)
 VALUES ('USER', 100000),
        ('ADMIN', 100001);
+
+INSERT INTO meals (user_id, datetime, description, calories)
+VALUES (100000, '2024-01-01 08:00:00', 'завтрак USER', 500),
+       (100000, '2024-01-01 13:00:00', 'обед USER', 800),
+       (100000, '2024-01-01 18:00:00', 'ужин USER', 700),
+       (100001, '2024-01-01 08:00:00', 'завтрак ADMIN', 300),
+       (100001, '2024-01-01 13:00:00', 'обед ADMIN', 500),
+       (100001, '2024-01-01 18:00:00', 'ужин ADMIN', 1200)
