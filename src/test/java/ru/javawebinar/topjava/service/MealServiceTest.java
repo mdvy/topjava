@@ -1,8 +1,6 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.bridge.SLF4JBridgeHandler;
@@ -13,8 +11,6 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.Role;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
@@ -57,6 +53,7 @@ public class MealServiceTest {
     public void getByNotExistingId() {
         assertThrows(NotFoundException.class, () -> service.get(NOT_EXISTING_ID, USER_ID));
     }
+
     @Test
     public void getAlienMeal() {
         assertThrows(NotFoundException.class, () -> service.get(USER_MEAL2.getId(), ADMIN_ID));
@@ -70,7 +67,7 @@ public class MealServiceTest {
     }
 
     @Test
-    public void deleteAlienMeal(){
+    public void deleteAlienMeal() {
         assertThrows(NotFoundException.class, () -> service.delete(ADMIN_MEAL1.getId(), USER_ID));
     }
 
@@ -94,7 +91,7 @@ public class MealServiceTest {
     }
 
     @Test
-    public void updateAlienMeal(){
+    public void updateAlienMeal() {
         assertThrows(NotFoundException.class, () -> service.update(USER_MEAL1, ADMIN_ID));
     }
 
@@ -109,6 +106,6 @@ public class MealServiceTest {
     @Test
     public void duplicateDateTimeCreate() {
         assertThrows(DataAccessException.class, () ->
-                service.create(new Meal(LocalDateTime.of(2024, 1,1,13,0), "повторный обед USER",1000), USER_ID));
+                service.create(new Meal(LocalDateTime.of(2024, 1, 1, 13, 0), "повторный обед USER", 1000), USER_ID));
     }
 }

@@ -2,17 +2,13 @@ package ru.javawebinar.topjava;
 
 import ru.javawebinar.topjava.model.Meal;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.InstanceOfAssertFactories.STREAM;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class MealsTestData {
     public static final int NOT_EXISTING_ID = 100;
@@ -56,7 +52,7 @@ public class MealsTestData {
                 .isEqualTo(expected);
     }
 
-    public static Meal getCreated(){
-        return new Meal(LocalDateTime.of(2024, 1, 1, 12, 0 ), "полдник USER", 300);
+    public static Meal getCreated() {
+        return new Meal(LocalDateTime.of(2024, 1, 1, 12, 0), "полдник USER", 300);
     }
 }
