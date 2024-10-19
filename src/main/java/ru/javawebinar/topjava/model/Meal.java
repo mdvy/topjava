@@ -1,7 +1,5 @@
 package ru.javawebinar.topjava.model;
 
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
