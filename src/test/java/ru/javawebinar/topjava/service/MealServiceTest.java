@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
@@ -34,6 +35,12 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
 
+    static {
+        // Only for postgres driver logging
+        // It uses java.util.logging and logged via jul-to-slf4j bridge
+        SLF4JBridgeHandler.install();
+    }
+
     @Autowired
     private MealService service;
 
@@ -47,11 +54,11 @@ public class MealServiceTest {
     }
 
     @Test
-    public void getByNotExistingIdShouldThrowNotFoundException() {
+    public void getByNotExistingId() {
         assertThrows(NotFoundException.class, () -> service.get(NOT_EXISTING_ID, USER_ID));
     }
     @Test
-    public void getAlienMealShouldThrowNotFoundException() {
+    public void getAlienMeal() {
         assertThrows(NotFoundException.class, () -> service.get(USER_MEAL2.getId(), ADMIN_ID));
     }
 
@@ -63,7 +70,7 @@ public class MealServiceTest {
     }
 
     @Test
-    public void deleteAlienMealShouldThrowNotFoundException(){
+    public void deleteAlienMeal(){
         assertThrows(NotFoundException.class, () -> service.delete(ADMIN_MEAL1.getId(), USER_ID));
     }
 
@@ -87,7 +94,7 @@ public class MealServiceTest {
     }
 
     @Test
-    public void updateAlienMealShouldThrowNotFoundException(){
+    public void updateAlienMeal(){
         assertThrows(NotFoundException.class, () -> service.update(USER_MEAL1, ADMIN_ID));
     }
 
@@ -103,6 +110,5 @@ public class MealServiceTest {
     public void duplicateDateTimeCreate() {
         assertThrows(DataAccessException.class, () ->
                 service.create(new Meal(LocalDateTime.of(2024, 1,1,13,0), "повторный обед USER",1000), USER_ID));
-
     }
 }
