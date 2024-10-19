@@ -6,14 +6,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.Role;
+import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.Assert.assertThrows;
@@ -36,14 +40,6 @@ public class MealServiceTest {
     @Autowired
     private MealRepository repository;
 
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    @After
-    public void tearDown() throws Exception {
-    }
-
     @Test
     public void get() {
         Meal actualMeal = service.get(START_MEALS_ID, USER_ID);
@@ -54,12 +50,21 @@ public class MealServiceTest {
     public void getByNotExistingIdShouldThrowNotFoundException() {
         assertThrows(NotFoundException.class, () -> service.get(NOT_EXISTING_ID, USER_ID));
     }
+    @Test
+    public void getAlienMealShouldThrowNotFoundException() {
+        assertThrows(NotFoundException.class, () -> service.get(USER_MEAL2.getId(), ADMIN_ID));
+    }
 
     @Test
     public void delete() {
         int mealId = USER_MEAL1.getId();
         service.delete(mealId, USER_ID);
         Assert.assertNull(repository.get(mealId, USER_ID));
+    }
+
+    @Test
+    public void deleteAlienMealShouldThrowNotFoundException(){
+        assertThrows(NotFoundException.class, () -> service.delete(ADMIN_MEAL1.getId(), USER_ID));
     }
 
     @Test
@@ -82,7 +87,7 @@ public class MealServiceTest {
     }
 
     @Test
-    public void updateWithWrongUserShouldThrowNotFoundException(){
+    public void updateAlienMealShouldThrowNotFoundException(){
         assertThrows(NotFoundException.class, () -> service.update(USER_MEAL1, ADMIN_ID));
     }
 
@@ -92,5 +97,12 @@ public class MealServiceTest {
         Meal storedMeal = service.create(newMeal, USER_ID);
         newMeal.setId(storedMeal.getId());
         assertMatch(storedMeal, newMeal);
+    }
+
+    @Test
+    public void duplicateDateTimeCreate() {
+        assertThrows(DataAccessException.class, () ->
+                service.create(new Meal(LocalDateTime.of(2024, 1,1,13,0), "повторный обед USER",1000), USER_ID));
+
     }
 }

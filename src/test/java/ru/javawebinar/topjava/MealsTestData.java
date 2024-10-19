@@ -37,12 +37,11 @@ public class MealsTestData {
     public static final Meal ADMIN_MEAL5 = new Meal(START_MEALS_ID + 10, DATE_2.atTime(TIME_2), "обед ADMIN", 600);
     public static final Meal ADMIN_MEAL6 = new Meal(START_MEALS_ID + 11, DATE_2.atTime(TIME_3), "ужин ADMIN", 1300);
     public static final List<Meal> USER_MEALS = Arrays.asList(USER_MEAL6, USER_MEAL5, USER_MEAL4, USER_MEAL3, USER_MEAL2, USER_MEAL1);
-    public static final List<Meal> ADMIN_MEALS = Arrays.asList(ADMIN_MEAL6, ADMIN_MEAL5, ADMIN_MEAL4, ADMIN_MEAL3, ADMIN_MEAL2, ADMIN_MEAL1);
     public static final List<Meal> ADMIN_MEALS_DATE1 = Arrays.asList(ADMIN_MEAL3, ADMIN_MEAL2, ADMIN_MEAL1);
 
     public static Meal getUpdated() {
         Meal meal = USER_MEAL1;
-        return new Meal(meal.getId(), meal.getDateTime(), "ужин USER updated", 100);
+        return new Meal(meal.getId(), meal.getDateTime(), "ужин USER обновлен", 100);
     }
 
     public static void assertMatch(Meal actualMeal, Meal expectedMeal) {
@@ -58,6 +57,6 @@ public class MealsTestData {
     }
 
     public static Meal getCreated(){
-        return new Meal(LocalDateTime.of(1024, 1, 1, 12, 0 ), "полдник USER", 300);
+        return new Meal(LocalDateTime.of(2024, 1, 1, 12, 0 ), "полдник USER", 300);
     }
 }
