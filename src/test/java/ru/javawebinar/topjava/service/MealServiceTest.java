@@ -73,7 +73,7 @@ public class MealServiceTest {
 
     @Test
     public void getBetweenInclusive() {
-        List<Meal> betweenInclusiveMeals = service.getBetweenInclusive(DATE_1, DATE_1, ADMIN_ID);
+        List<Meal> betweenInclusiveMeals = service.getBetweenInclusive(DATE1, DATE1, ADMIN_ID);
         assertMatch(betweenInclusiveMeals, ADMIN_MEALS_DATE1);
     }
 
