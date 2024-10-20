@@ -13,7 +13,6 @@ import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
 public class MealsTestData {
     public static final int NOT_EXISTING_MEAL_ID = 100;
-    public static final int NOT_EXISTING_USER_ID = 100;
     public static final int START_MEALS_ID = START_SEQ + 3;
     public static final LocalDate DATE1 = LocalDate.of(2024, 1, 1);
     public static final LocalDate DATE2 = LocalDate.of(2024, 1, 2);

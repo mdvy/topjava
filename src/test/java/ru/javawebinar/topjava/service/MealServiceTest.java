@@ -18,9 +18,10 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
+import static ru.javawebinar.topjava.MealsTestData.assertMatch;
+import static ru.javawebinar.topjava.MealsTestData.getUpdated;
 import static ru.javawebinar.topjava.MealsTestData.*;
-import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
-import static ru.javawebinar.topjava.UserTestData.USER_ID;
+import static ru.javawebinar.topjava.UserTestData.*;
 
 
 @ContextConfiguration({
@@ -139,7 +140,7 @@ public class MealServiceTest {
     @Test
     public void createWithNotExistingUser() {
         Meal newMeal = getCreated();
-        assertThrows(DataAccessException.class, () -> service.create(newMeal, NOT_EXISTING_USER_ID));
+        assertThrows(DataAccessException.class, () -> service.create(newMeal, NOT_FOUND));
     }
 
     @Test
