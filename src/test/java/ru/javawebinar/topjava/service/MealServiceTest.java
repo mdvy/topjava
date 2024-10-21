@@ -131,10 +131,11 @@ public class MealServiceTest {
     @Test
     public void create() {
         Meal newMeal = getCreated(null);
-        int storedMealId = service.create(newMeal, USER_ID).getId();
-        Meal actual = service.get(storedMealId, USER_ID);
-        Meal expected = getCreated(storedMealId);
-        assertMatch(actual, expected);
+        Meal created = service.create(newMeal, USER_ID);
+        Meal expected = getCreated(created.getId());
+        assertMatch(created, expected);
+        Meal stored = service.get(created.getId(), USER_ID);
+        assertMatch(stored, expected);
     }
 
     @Test
