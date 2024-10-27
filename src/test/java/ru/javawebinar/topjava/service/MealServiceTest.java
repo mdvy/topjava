@@ -43,7 +43,7 @@ public class MealServiceTest {
     public Stopwatch stopwatch = new Stopwatch() {
         @Override
         protected void finished(long nanos, Description description) {
-            String info = String.format("Test %s, spent %d ms\n",
+            String info = String.format("%-25s%5s ms\n",
                     description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos));
             log.info(info);
             benchmarkTimes.append(info);
@@ -52,7 +52,9 @@ public class MealServiceTest {
 
     @AfterClass
     public static void benchmarkResults() {
-        log.info("\n##### BENCHMARK RESULTS #####\n");
+        benchmarkTimes.insert(0, "\n_________________________________\n");
+        benchmarkTimes.insert(0, String.format("%-25s%8s", "test name", "time"));
+        benchmarkTimes.insert(0, "\n####### BENCHMARK RESULTS #######\n");
         log.info(benchmarkTimes.toString());
     }
 
