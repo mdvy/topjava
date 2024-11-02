@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
     Optional<Meal> findByIdAndUserId(Integer id, Integer userId);
 
-    List<Meal> findAllByUserId(Integer userId);
+    List<Meal> findAllByUserIdOrderByDateTimeDesc(Integer userId);
 
     @Transactional
     @Modifying
