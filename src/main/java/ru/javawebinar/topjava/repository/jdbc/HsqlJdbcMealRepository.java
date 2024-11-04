@@ -8,14 +8,16 @@ import org.springframework.stereotype.Repository;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-@Profile("hsqldb")
+import static ru.javawebinar.topjava.Profiles.HSQL_DB;
+
+@Profile(HSQL_DB)
 @Repository
-public class HsqlJdbcMealRepository extends JdbcMealRepository {
+public class HsqlJdbcMealRepository extends JdbcMealRepository<Timestamp> {
     public HsqlJdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         super(jdbcTemplate, namedParameterJdbcTemplate);
     }
 
-    public Object getDateTimeForCurrentDB(LocalDateTime localDateTime) {
+    public Timestamp getDateTimeForCurrentDB(LocalDateTime localDateTime) {
         return Timestamp.valueOf(localDateTime);
     }
 }

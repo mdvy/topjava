@@ -1,7 +1,8 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.AfterClass;
+import org.junit.ClassRule;
 import org.junit.Rule;
+import org.junit.rules.ExternalResource;
 import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
@@ -39,12 +40,20 @@ public abstract class ServiceTest {
         }
     };
 
-    @AfterClass
-    public static void printResult() {
-        log.info("\n---------------------------------" +
-                "\nTest                 Duration, ms" +
-                "\n---------------------------------" +
-                results +
-                "\n---------------------------------");
-    }
+    @ClassRule
+    public static ExternalResource resource = new ExternalResource() {
+        @Override
+        protected void before() throws Throwable {
+            results.setLength(0);
+        }
+
+        @Override
+        protected void after() {
+            log.info("\n---------------------------------" +
+                    "\nTest                 Duration, ms" +
+                    "\n---------------------------------" +
+                    results +
+                    "\n---------------------------------");
+        }
+    };
 }
