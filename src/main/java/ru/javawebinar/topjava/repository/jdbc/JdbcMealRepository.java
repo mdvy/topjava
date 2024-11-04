@@ -16,15 +16,14 @@ import java.util.List;
 
 public abstract class JdbcMealRepository<T> implements MealRepository {
 
-    protected static final RowMapper<Meal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Meal.class);
+    private static final RowMapper<Meal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Meal.class);
 
-    protected final JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private final SimpleJdbcInsert insertMeal;
 
-    @Autowired
     public JdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.insertMeal = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("meal")
@@ -34,7 +33,7 @@ public abstract class JdbcMealRepository<T> implements MealRepository {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
-    public abstract T getDateTimeForCurrentDB(LocalDateTime dateTime);
+    protected abstract T getDateTimeForCurrentDB(LocalDateTime dateTime);
 
     @Override
     public Meal save(Meal meal, int userId) {
