@@ -5,9 +5,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 
 @Profile("hsqldb")
 @Repository
@@ -16,7 +15,7 @@ public class HsqlJdbcMealRepository extends JdbcMealRepository {
         super(jdbcTemplate, namedParameterJdbcTemplate);
     }
 
-    public Object getDateTime(LocalDateTime localDateTime) {
-        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+    public Object getDateTimeForCurrentDB(LocalDateTime localDateTime) {
+        return Timestamp.valueOf(localDateTime);
     }
 }

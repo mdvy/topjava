@@ -44,7 +44,7 @@ public class JdbcMealRepository implements MealRepository {
                 .addValue("id", meal.getId())
                 .addValue("description", meal.getDescription())
                 .addValue("calories", meal.getCalories())
-                .addValue("date_time", getDateTime(meal.getDateTime()))
+                .addValue("date_time", getDateTimeForCurrentDB(meal.getDateTime()))
                 .addValue("user_id", userId);
 
         if (meal.isNew()) {
@@ -84,11 +84,11 @@ public class JdbcMealRepository implements MealRepository {
         return jdbcTemplate.query(
                 "SELECT * FROM meal WHERE user_id=?  AND date_time >=  ? AND date_time < ? ORDER BY date_time DESC",
                 ROW_MAPPER, userId,
-                getDateTime(startDateTime),
-                getDateTime(endDateTime));
+                getDateTimeForCurrentDB(startDateTime),
+                getDateTimeForCurrentDB(endDateTime));
     }
 
-    public Object getDateTime(LocalDateTime dateTime) {
+    public Object getDateTimeForCurrentDB(LocalDateTime dateTime) {
         return dateTime;
     }
 }
